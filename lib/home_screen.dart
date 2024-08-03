@@ -1,4 +1,7 @@
+// lib/home_screen.dart
 import 'package:flutter/material.dart';
+import 'arquivos_screen.dart';
+import 'perfil_screen.dart'; // Importar a nova tela
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -9,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  int _pageIndex = 0;
   double tamanhoIcon = 250.0;
   double tamanhoFonte = 40;
   double heightSize = 10;
@@ -21,105 +25,130 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _selectedIndex = index;
     });
-    _pageController.jumpToPage(index);
+    if (index == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const PerfilScreen(),
+        ),
+      ).then((_) {
+        setState(() {
+          _selectedIndex = 0; // Volta para a Home
+        });
+      });
+    }
+  }
+
+  void _onPageChanged(int index) {
+    setState(() {
+      _pageIndex = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: background, // Cor de fundo da tela
+      backgroundColor: background,
       appBar: AppBar(
         backgroundColor: background,
         elevation: 0,
-        title: const Center(
-          child: Text(
-            'BIONIC VIEW',
-            style: TextStyle(color: Colors.black),
-          ),
+        centerTitle: true,
+        title: Column(
+          children: [
+            SizedBox(
+              height: 100,
+              child: Image.asset(
+                'assets/logo.png',
+                fit: BoxFit.contain,
+              ),
+            ),
+            const Text(
+              'BIONIC VIEW',
+              style: TextStyle(color: Colors.black, fontSize: 20),
+            ),
+          ],
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: PageView(
-              controller: _pageController,
-              onPageChanged: (index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              },
-              children: <Widget>[
-                Center(
+      body: _buildHomeContent(),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        selectedItemColor: background,
+        unselectedItemColor: branco,
+        backgroundColor: const Color(0xFF1D1F24),
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Perfil',
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHomeContent() {
+    return Column(
+      children: [
+        Expanded(
+          child: PageView(
+            controller: _pageController,
+            onPageChanged: _onPageChanged,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ArquivosScreen()),
+                  );
+                },
+                child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.insert_drive_file_outlined, size: tamanhoIcon, color: Colors.black),
+                      Icon(Icons.insert_drive_file_outlined,
+                          size: tamanhoIcon, color: Colors.black),
                       SizedBox(height: heightSize),
                       Text('Arquivos', style: TextStyle(fontSize: tamanhoFonte))
                     ],
                   ),
                 ),
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.camera_alt_outlined, size: tamanhoIcon, color: Colors.black),
-                      SizedBox(height: heightSize),
-                      Text('Dispositivo', style: TextStyle(fontSize: tamanhoFonte))
-                    ],
-                  ),
+              ),
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.camera_alt_outlined,
+                        size: tamanhoIcon, color: Colors.black),
+                    SizedBox(height: heightSize),
+                    Text('Dispositivo',
+                        style: TextStyle(fontSize: tamanhoFonte))
+                  ],
                 ),
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.person_outlined, size: tamanhoIcon, color: Colors.black),
-                      SizedBox(height: heightSize),
-                      Text('Perfil', style: TextStyle(fontSize: tamanhoFonte))
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(3, (index) {
-              return Container(
-                margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                width: 10,
-                height: 10,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: _selectedIndex == index ? Colors.black : Colors.grey,
-                ),
-              );
-            }),
-          ),
-          const SizedBox(height: 16), // Espaço abaixo dos indicadores
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: branco, // Cor dos ícones e texto selecionados
-        unselectedItemColor: background, // Cor dos ícones e texto não selecionados
-        backgroundColor: const Color(0xFF1D1F24), // Cor de fundo da barra de navegação
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.insert_drive_file),
-            label: 'Arquivos',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.devices),
-            label: 'Dispositivo',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Perfil', 
-          ),
-        ],
-      ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(2, (index) {
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4.0),
+              width: 10,
+              height: 10,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _pageIndex == index ? Colors.black : Colors.grey,
+              ),
+            );
+          }),
+        ),
+        const SizedBox(height: 16), // Espaço abaixo dos indicadores
+      ],
     );
   }
 }

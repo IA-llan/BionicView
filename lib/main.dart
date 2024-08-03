@@ -40,17 +40,22 @@ class FirstScreen extends StatelessWidget {
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 50), // Espaçamento horizontal e vertical
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 60,
+                    vertical: 50), // Espaçamento horizontal e vertical
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const SecondScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const SecondScreen()),
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1D1F24), // Cor de fundo do botão
-                    minimumSize: const Size(double.infinity, 48), // Botão preenchendo a largura
+                    backgroundColor:
+                        const Color(0xFF1D1F24), // Cor de fundo do botão
+                    minimumSize: const Size(
+                        double.infinity, 48), // Botão preenchendo a largura
                   ),
                   child: const Padding(
                     padding: EdgeInsets.symmetric(vertical: 16.0),
