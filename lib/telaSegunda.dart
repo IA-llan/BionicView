@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart';  // Certifique-se de ajustar o caminho conforme a estrutura do seu projeto
+import 'RegisterScreen.dart';
+import 'LoginScreen.dart'; // Importe a tela de login
 
 class SecondScreen extends StatelessWidget {
   const SecondScreen({super.key});
@@ -16,7 +17,8 @@ class SecondScreen extends StatelessWidget {
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 children: [
-                  Image.asset('assets/logo.png', height: 100), // Substitua pelo seu logo
+                  Image.asset('assets/logo.png',
+                      height: 100), // Substitua pelo seu logo
                   const SizedBox(height: 20),
                   const Text(
                     'Junte-se a nós e transforme\nsua rotina com nosso app\ninovador.',
@@ -44,12 +46,16 @@ class SecondScreen extends StatelessWidget {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const HomeScreen()),
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const LoginScreen()), // Navega para a tela de login
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF1D1F24), // Cor de fundo do botão
-                            minimumSize: const Size(double.infinity, 48), // Botão preenchendo a largura
+                            backgroundColor: const Color(
+                                0xFF1D1F24), // Cor de fundo do botão
+                            minimumSize: const Size(double.infinity,
+                                48), // Botão preenchendo a largura
                           ),
                           child: const Text(
                             'Entrar',
@@ -62,11 +68,18 @@ class SecondScreen extends StatelessWidget {
                         const SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {
-                            // Ação do botão "Registrar"
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const RegisterScreen()), // Navega para a tela de registro
+                            );
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.grey[300], // Cor de fundo do botão
-                            minimumSize: const Size(double.infinity, 48), // Botão preenchendo a largura
+                            backgroundColor:
+                                Colors.grey[300], // Cor de fundo do botão
+                            minimumSize: const Size(double.infinity,
+                                48), // Botão preenchendo a largura
                           ),
                           child: const Text(
                             'Registrar',
