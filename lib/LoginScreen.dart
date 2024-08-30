@@ -1,12 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:primeiro_projeto/login_service.dart';
 import 'home_screen.dart'; // Importe a HomeScreen
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key});
+  final LoginService loginService = const LoginService();
+  final emailField = TextEditingController();
+  final senhaField = TextEditingController();
+
+  void login(BuildContext context) async {
+    if (await loginService.execute(
+        password: senhaField.text, email: emailField.text)) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Column(
+        children: [Text('Opa, errou ai paizao')],
+      )));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFF48B281), // Cor de fundo
       body: SafeArea(
         child: Padding(
@@ -17,8 +37,9 @@ class LoginScreen extends StatelessWidget {
               Image.asset('assets/logo.png',
                   height: 100), // Substitua pelo seu logo
               const SizedBox(height: 20),
-              const TextField(
-                decoration: InputDecoration(
+              TextField(
+                controller: emailField,
+                decoration: const InputDecoration(
                   hintText: 'Email',
                   filled: true,
                   fillColor: Colors.white,
@@ -28,9 +49,10 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              const TextField(
+              TextField(
+                controller: senhaField,
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Senha',
                   filled: true,
                   fillColor: Colors.white,
@@ -42,10 +64,7 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomeScreen()),
-                  );
+                  login(context);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,

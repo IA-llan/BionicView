@@ -48,7 +48,7 @@ class SecondScreen extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      const LoginScreen()), // Navega para a tela de login
+                                      LoginScreen()), // Navega para a tela de login
                             );
                           },
                           style: ElevatedButton.styleFrom(
@@ -72,7 +72,7 @@ class SecondScreen extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      const RegisterScreen()), // Navega para a tela de registro
+                                      RegisterScreen()), // Navega para a tela de registro
                             );
                           },
                           style: ElevatedButton.styleFrom(

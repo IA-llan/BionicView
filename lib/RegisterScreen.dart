@@ -1,12 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:primeiro_projeto/register_service.dart';
 import 'LoginScreen.dart';
+import 'home_screen.dart'; // Importe a HomeScreen
 
 class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({super.key});
+  RegisterScreen({super.key});
+  final RegisterService registerService = const RegisterService();
+  final nameField = TextEditingController();
+  final emailField = TextEditingController();
+  final senhaField = TextEditingController();
+
+  void register(BuildContext context) async {
+    if (await registerService.execute(
+        nomeCompleto: nameField.text,
+        password: senhaField.text,
+        email: emailField.text)) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Column(
+        children: [Text('Opa, faltou coisa ai paizao')],
+      )));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFF48B281), // Cor de fundo
       body: SafeArea(
         child: Padding(
@@ -17,7 +41,8 @@ class RegisterScreen extends StatelessWidget {
               Image.asset('assets/logo.png',
                   height: 100), // Substitua pelo seu logo
               const SizedBox(height: 20),
-              const TextField(
+              TextField(
+                controller: nameField,
                 decoration: InputDecoration(
                   hintText: 'Nome completo',
                   filled: true,
@@ -28,7 +53,8 @@ class RegisterScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              const TextField(
+              TextField(
+                controller: emailField,
                 decoration: InputDecoration(
                   hintText: 'Email',
                   filled: true,
@@ -39,7 +65,8 @@ class RegisterScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              const TextField(
+              TextField(
+                controller: senhaField,
                 obscureText: true,
                 decoration: InputDecoration(
                   hintText: 'Senha',
@@ -53,7 +80,7 @@ class RegisterScreen extends StatelessWidget {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  // Ação de registrar
+                  register(context); // Ação de registrar
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
@@ -114,8 +141,7 @@ class RegisterScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const LoginScreen()),
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
                   );
                 },
                 child: const Text(
